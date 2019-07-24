@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./component/Header";
-import Table from "./component/Table";
+import Table from "./component/Table/Table";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import ErrorPage from "./component/404/ErrorPage";
 import Add from "./component/Add";

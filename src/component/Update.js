@@ -47,14 +47,14 @@ export default class Update extends Component {
       }
 
       this.setState({
-        
         id:res.data.id,
         create_at:res.data.create_at,
         taskName: res.data.taskName,
         taskIdentifier: res.data.taskIdentifier,
         desc: res.data.desc,
         start_date: start_date,
-        end_date: end_date
+        end_date: end_date,
+        min_date: new Date()
       });
     });
   }
@@ -66,9 +66,17 @@ export default class Update extends Component {
   }
 
   handleChangeStart(date) {
+    console.log(this.state.end_date);
+    
+    if(date>this.state.end_date && this.state.end_date !=null){
+      this.setState({
+          end_date:date
+      })
+    }
     this.setState({
       start_date: date,
-      min_date: date
+      min_date: date,
+
     });
   }
 
@@ -77,6 +85,7 @@ export default class Update extends Component {
       end_date: date
     });
   }
+
 
   onSubmit(e) {
     e.preventDefault();
@@ -136,19 +145,6 @@ export default class Update extends Component {
             onChange={this.onChange}
           />
           <div className="validate">{this.state.error.taskName}</div>
-        </div>
-
-        <div className="form-group mb-4">
-          <input
-            type="text"
-            name="taskIdentifier"
-            className="form-control"
-            placeholder="Task Identifier"
-            value={this.state.taskIdentifier}
-            onChange={this.onChange}
-          />
-          <div className="validate">{this.state.error.taskIdentifier}</div>
-          <div className="validate">{this.state.error.response}</div>
         </div>
         <div className="form-group mb-4">
           <textarea

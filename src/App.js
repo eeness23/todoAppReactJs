@@ -8,6 +8,7 @@ import ErrorPage from "./component/404/ErrorPage";
 import Add from "./component/Add";
 import Login from "./component/Login";
 import Register from "./component/Register";
+import Update from "./component/Update";
 
 class App extends Component {
   render() {
@@ -20,6 +21,7 @@ class App extends Component {
             <Route path="/add" component={Add} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
+            <Route path="/tasks/:taskId" component={Update} />
             <Route path="*" component={ErrorPage} />
           </Switch>
         </div>

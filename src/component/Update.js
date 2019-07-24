@@ -3,25 +3,60 @@ import action from "../action/taskAction";
 import "../css/add.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from 'moment';
+import moment from "moment";
 
-export default class Add extends Component {
+export default class Update extends Component {
   constructor() {
     super();
 
     this.state = {
+      id:"",
       taskName: "",
       taskIdentifier: "",
       desc: "",
       start_date: "",
+      create_at: "",
       end_date: "",
       min_date: new Date(),
-      error: {}
+      error: {},
+      loading: true
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.handleChangeEnd = this.handleChangeEnd.bind(this);
     this.handleChangeStart = this.handleChangeStart.bind(this);
+  }
+
+  componentDidMount() {
+    const { taskId } = this.props.match.params;
+
+    action.getTaskById(taskId).then(res => {
+      let { start_date, end_date } = res.data;
+
+      if (start_date != null) {
+        let tempStartDate = start_date.toString().split("/");
+        start_date = new Date(
+          tempStartDate[2] + "-" + tempStartDate[1] + "-" + tempStartDate[0]
+        );
+      }
+      if (end_date != null) {
+        let tempEndDate = end_date.toString().split("/");
+        end_date = new Date(
+          tempEndDate[2] + "-" + tempEndDate[1] + "-" + tempEndDate[0]
+        );
+      }
+
+      this.setState({
+        
+        id:res.data.id,
+        create_at:res.data.create_at,
+        taskName: res.data.taskName,
+        taskIdentifier: res.data.taskIdentifier,
+        desc: res.data.desc,
+        start_date: start_date,
+        end_date: end_date
+      });
+    });
   }
 
   onChange(e) {
@@ -31,15 +66,9 @@ export default class Add extends Component {
   }
 
   handleChangeStart(date) {
-    if(date>this.state.end_date && this.state.end_date !=""){
-      this.setState({
-          end_date:date
-      })
-    }
     this.setState({
       start_date: date,
-      min_date: date,
-
+      min_date: date
     });
   }
 
@@ -51,35 +80,36 @@ export default class Add extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    
+
     let {start_date,end_date} = this.state;
 
-
-    if(start_date!=""){
+    if(start_date!=null){
       start_date=moment(this.state.start_date).format("DD/MM/YYYY");
     }
-    if(end_date!=""){
+    if(end_date!=null){
       end_date=moment(this.state.end_date).format("DD/MM/YYYY");
     }
     
-
     const newTask = {
+      id: this.state.id,
+      create_at: this.state.create_at,
       taskName: this.state.taskName,
       taskIdentifier: this.state.taskIdentifier,
       desc: this.state.desc,
-      start_date:start_date,
-      end_date:end_date
+      start_date: start_date,
+      end_date: end_date
     };
 
     console.log(newTask);
+  
 
     action
       .createTask(newTask)
       .then(res => {
         this.props.history.push({
           pathname: "/",
-          state : {createNew : res.data.taskIdentifier}
-        })
+          state: { update: res.data.taskIdentifier }
+        });
       })
       .catch(err => {
         this.setState({

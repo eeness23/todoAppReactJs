@@ -1,107 +1,112 @@
 import React, { Component } from "react";
+import {register} from "../action/Action";
 
 export default class Register extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      fullName: "",
+      password: "",
+      confirmPassword: "",
+      error: {}
+    };
+
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
+  onSubmit(e) {
+    e.preventDefault();
+    const newUser = {
+      username: this.state.username,
+      fullName: this.state.fullName,
+      password: this.state.password,
+      confirmPassword: this.state.confirmPassword
+    };
+    console.log(newUser);
+
+    
+      register(newUser)
+      .then(()=>{
+        this.props.history.push({
+          pathname: "/login",
+          state : {createUser : true}
+        })
+      })
+      .catch(err => {
+        this.setState({
+          error: err.response.data
+        })
+      });
+  }
+
   render() {
     return (
-      <form className="text-center border border-light p-5" action="#!">
+      <form
+        className="text-center border border-light p-5"
+        onSubmit={this.onSubmit}
+      >
         <p className="h4 mb-4">Sign up</p>
+        <div className="form-group mb-4">
+          <input
+            type="text"
+            name="fullName"
+            className="form-control"
+            placeholder="Full Name"
+            value={this.state.fullName}
+            onChange={this.onChange}
+          />
+          <div className="validate">{this.state.error.fullName}</div>
+        </div>
+
+        <div className="form-group mb-4">
+          <input
+            type="email"
+            name="username"
+            className="form-control"
+            placeholder="Email"
+            value={this.state.username}
+            onChange={this.onChange}
+          />
+          <div className="validate">{this.state.error.username}</div>
+        </div>
 
         <div className="form-row mb-4">
           <div className="col">
             <input
-              type="text"
-              id="defaultRegisterFormFirstName"
+              type="password"
+              name="password"
               className="form-control"
-              placeholder="First name"
+              placeholder="Password"
+              value={this.state.password}
+              onChange={this.onChange}
             />
+            <div className="validate">{this.state.error.password}</div>
           </div>
+
           <div className="col">
             <input
-              type="text"
-              id="defaultRegisterFormLastName"
+              type="password"
+              name="confirmPassword"
               className="form-control"
-              placeholder="Last name"
+              placeholder="ConfirmPassword"
+              value={this.state.confirmPassword}
+              onChange={this.onChange}
             />
+            <div className="validate">{this.state.error.confirmPassword}</div>
           </div>
         </div>
 
-        <input
-          type="email"
-          id="defaultRegisterFormEmail"
-          className="form-control mb-4"
-          placeholder="E-mail"
-        />
-
-        <input
-          type="password"
-          id="defaultRegisterFormPassword"
-          className="form-control"
-          placeholder="Password"
-          aria-describedby="defaultRegisterFormPasswordHelpBlock"
-        />
-        <small
-          id="defaultRegisterFormPasswordHelpBlock"
-          className="form-text text-muted mb-4"
-        >
-          At least 8 characters and 1 digit
-        </small>
-
-        <input
-          type="text"
-          id="defaultRegisterPhonePassword"
-          className="form-control"
-          placeholder="Phone number"
-          aria-describedby="defaultRegisterFormPhoneHelpBlock"
-        />
-        <small
-          id="defaultRegisterFormPhoneHelpBlock"
-          className="form-text text-muted mb-4"
-        >
-          Optional - for two step authentication
-        </small>
-
-        <div className="custom-control custom-checkbox">
-          <input
-            type="checkbox"
-            className="custom-control-input"
-            id="defaultRegisterFormNewsletter"
-          />
-          <label
-            className="custom-control-label"
-            for="defaultRegisterFormNewsletter"
-          >
-            Subscribe to our newsletter
-          </label>
-        </div>
-
-        <button className="btn btn-info my-4 btn-block" type="submit">
-          Sign in
+        <button className="btn btn-info btn-block" type="submit">
+          Send
         </button>
-
-        <p>or sign up with:</p>
-
-        <a type="button" className="light-blue-text mx-2">
-          <i className="fab fa-facebook-f" />
-        </a>
-        <a type="button" className="light-blue-text mx-2">
-          <i className="fab fa-twitter" />
-        </a>
-        <a type="button" className="light-blue-text mx-2">
-          <i className="fab fa-linkedin-in" />
-        </a>
-        <a type="button" className="light-blue-text mx-2">
-          <i className="fab fa-github" />
-        </a>
-
-        <hr />
-
-        <p>
-          By clicking
-          <em>Sign up</em> you agree to our
-          <a href="" target="_blank">
-            terms of service
-          </a>
-        </p>
       </form>
     );
   }

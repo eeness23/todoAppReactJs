@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import action from "../action/taskAction";
+import {createTask} from "../action/Action";
 import "../css/add.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -73,8 +73,8 @@ export default class Add extends Component {
 
     console.log(newTask);
 
-    action
-      .createTask(newTask)
+   
+      createTask(newTask)
       .then(res => {
         this.props.history.push({
           pathname: "/",

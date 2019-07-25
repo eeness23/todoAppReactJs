@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import action from "../action/taskAction";
+import {getTaskById,createTask} from "../action/Action";
 import "../css/add.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -30,7 +30,7 @@ export default class Update extends Component {
   componentDidMount() {
     const { taskId } = this.props.match.params;
 
-    action.getTaskById(taskId).then(res => {
+    getTaskById(taskId).then(res => {
       let { start_date, end_date } = res.data;
 
       if (start_date != null) {
@@ -112,8 +112,7 @@ export default class Update extends Component {
     console.log(newTask);
   
 
-    action
-      .createTask(newTask)
+    createTask(newTask)
       .then(res => {
         this.props.history.push({
           pathname: "/",

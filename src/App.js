@@ -8,21 +8,27 @@ import Add from "./component/Add";
 import Login from "./component/Login";
 import Register from "./component/Register";
 import Update from "./component/Update";
-import PrivateRoute from "./component/PrivateRoute";
+import {setJwtToSession,getJwtFromSession} from "./security/jwt"
+import Header from "./component/Header";
 
 
 class App extends Component {
   render() {
+    setJwtToSession(getJwtFromSession());
+
     return (
       <BrowserRouter>
+      <Header/>
+      <div className="container">
           <Switch>
             <Route exact path="/" component={Table} />
-            <PrivateRoute redirectToLogin={false} component={Add} path="/add"/>
+            <Route component={Add} path="/add"/>
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
-            <PrivateRoute redirectToLogin={false} path="/tasks/:taskId" component={Update} />
+            <Route path="/tasks/:taskId" component={Update} />
             <Route path="*" component={ErrorPage} />
           </Switch>
+          </div>
       </BrowserRouter>
     );
   }

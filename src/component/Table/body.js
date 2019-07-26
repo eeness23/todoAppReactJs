@@ -24,7 +24,10 @@ class body extends Component {
 
   deleteTask(taskId) {
     deleteById(taskId)
-      .then(this.reflesh)
+      .then( () =>{
+        this.reflesh();
+        this.props.deleteCallBack(taskId);
+      })
       .catch(err =>{
         if(err.response.status==401){
           this.props.history.push({
@@ -74,7 +77,7 @@ class body extends Component {
                 </Link>
               </td>
               <td>
-                <img
+                <img className="deleteItem"
                   src={remove}
                   alt="remove"
                   width="30px"

@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { login } from "../action/Action";
-import Header from "./Header";
-import {setJwtToSession} from "../security/jwt"
+import {setJwtToSession, decodeToken} from "../security/jwt"
 
 export default class Login extends Component {
   constructor(props) {
@@ -47,7 +46,7 @@ export default class Login extends Component {
         setJwtToSession(res.data.token)
         this.props.history.push({
           pathname: "/",
-          state: { welcome: true }
+          state: { fullName: [decodeToken(res.data.token).fullName] }
         });
       })
       .catch(err => {
@@ -59,9 +58,6 @@ export default class Login extends Component {
 
   render() {
     return (
-      <div>
-        <Header />
-        <div className="container">
           <form
             className="text-center border border-light"
             onSubmit={this.onSubmit}
@@ -111,8 +107,6 @@ export default class Login extends Component {
               <Link to="/register"> Register</Link>
             </p>
           </form>
-        </div>
-      </div>
     );
   }
 }

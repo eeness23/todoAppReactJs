@@ -23,4 +23,17 @@ const decodeToken = token => {
   return jwt_decode(token);
 };
 
-export { setJwtToSession, getJwtFromSession, getHeader, decodeToken };
+const redirectToLogin = () => {
+  if(getJwtFromSession()!="null"){
+    let currentTime = Date.now() / 1000;
+    let expTime = decodeToken(getJwtFromSession()).exp;
+    if(expTime<currentTime){
+      sessionStorage.removeItem("Authorization");
+      return true;
+    }
+    return false;
+  }
+  return true;
+}
+
+export { setJwtToSession, getJwtFromSession, getHeader, decodeToken,redirectToLogin };

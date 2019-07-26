@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import {register} from "../action/Action";
-import Header from "./Header"
 
 export default class Register extends Component {
   constructor(props) {
@@ -50,12 +49,8 @@ export default class Register extends Component {
 
   render() {
     return (
-      <div>
-        <Header />
-        <div className="container">
-       
       <form
-        className="text-center border border-light p-5"
+        className="text-center border border-light"
         onSubmit={this.onSubmit}
       >
         <p className="h4 mb-4">Sign up</p>
@@ -113,8 +108,6 @@ export default class Register extends Component {
           Send
         </button>
       </form>
-      </div>
-      </div>
     );
   }
 }

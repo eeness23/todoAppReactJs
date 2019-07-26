@@ -4,8 +4,7 @@ import "../css/add.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
-import Header from "./Header";
-import {getJwtFromSession} from "../security/jwt"
+import {getJwtFromSession,redirectToLogin} from "../security/jwt"
 
 export default class Add extends Component {
   constructor() {
@@ -28,6 +27,14 @@ export default class Add extends Component {
   }
 
   componentDidMount(){
+    if(redirectToLogin()){
+      this.props.history.push({
+        pathname: "/login",
+        state: { mustLogin: true }
+      });
+    }
+
+
     let tempToken = getJwtFromSession();
 
     this.setState({
@@ -42,7 +49,7 @@ export default class Add extends Component {
   }
 
   handleChangeStart(date) {
-    if (date > this.state.end_date && this.state.end_date != "") {
+    if (date > this.state.end_date && this.state.end_date !== "") {
       this.setState({
         end_date: date
       });
@@ -64,10 +71,10 @@ export default class Add extends Component {
 
     let { start_date, end_date } = this.state;
 
-    if (start_date != "") {
+    if (start_date !== "") {
       start_date = moment(this.state.start_date).format("DD/MM/YYYY");
     }
-    if (end_date != "") {
+    if (end_date !== "") {
       end_date = moment(this.state.end_date).format("DD/MM/YYYY");
     }
 
@@ -84,10 +91,10 @@ export default class Add extends Component {
         this.props.history.push({
           pathname: "/",
           state: { createNew: res.data.taskIdentifier }
-        });
+        });   
       })
       .catch(err => {
-        if (err.response.status == 401) {
+        if (err.response.status === 401) {
           this.props.history.push({
             pathname: "/login",
             state: { mustLogin: true }
@@ -102,9 +109,6 @@ export default class Add extends Component {
 
   render() {
     return (
-      <div>
-        <Header />
-        <div className="container">
           <form
             className="text-center border border-light"
             onSubmit={this.onSubmit}
@@ -177,8 +181,6 @@ export default class Add extends Component {
               Send
             </button>
           </form>
-        </div>
-      </div>
     );
   }
 }

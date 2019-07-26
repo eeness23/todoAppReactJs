@@ -4,7 +4,7 @@ import "../css/add.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
-import Header from "./Header"
+import {redirectToLogin} from "../security/jwt"
 
 export default class Update extends Component {
   constructor() {
@@ -29,6 +29,13 @@ export default class Update extends Component {
   }
 
   componentDidMount() {
+    if(redirectToLogin()){
+      this.props.history.push({
+        pathname: "/login",
+        state: { mustLogin: true }
+      });
+    }
+
     const { taskId } = this.props.match.params;
 
     getTaskById(taskId).then(res => {
@@ -133,11 +140,8 @@ export default class Update extends Component {
 
   render() {
     return (
-      <div>
-        <Header />
-        <div className="container">
       <form
-        className="text-center border border-light p-5"
+        className="text-center border border-light"
         onSubmit={this.onSubmit}
       >
         <p className="h4 mb-4">Create New Task</p>
@@ -195,8 +199,6 @@ export default class Update extends Component {
           Send
         </button>
       </form>
-      </div>
-      </div>
     );
   }
 }

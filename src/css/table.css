@@ -1,7 +1,12 @@
-.table thead th{
-    vertical-align: middle
+.table thead th {
+  vertical-align: middle;
 }
 
-.table td, .table th{
-    vertical-align: middle
+.table td,
+.table th {
+  vertical-align: middle;
+}
+
+.deleteItem {
+  cursor: pointer;
 }

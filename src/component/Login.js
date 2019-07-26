@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { login } from "../action/Action";
-import { setJwtToSession, decodeToken } from "../security/jwt";
+import { setJwtToSession, decodeToken,redirectToLogin} from "../security/jwt";
 import Header from "./Header";
+
 
 export default class Login extends Component {
   constructor(props) {
@@ -60,7 +61,7 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        <Header />
+      <Header changeButtonToCreate={redirectToLogin()}/>
         <div className="container">
           <form
             className="text-center border border-light"

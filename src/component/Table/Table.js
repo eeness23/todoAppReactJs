@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Thead from "./head";
 import Tbody from "./body";
 import "../../css/table.css";
-import { getJwtFromSession, decodeToken } from "../../security/jwt";
+import { getJwtFromSession, decodeToken,redirectToLogin } from "../../security/jwt";
 import Header from "../Header"
 
 export default class Dashboard extends Component {
@@ -45,7 +45,7 @@ export default class Dashboard extends Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header changeButtonToCreate={redirectToLogin()}/>
         <div className="container">
           <div className="mt-4">
             {this.state.createNew !== "" && this.state.createNew != null && (

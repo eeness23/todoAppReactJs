@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { register } from "../action/Action";
 import Header from "./Header";
+import {redirectToLogin} from '../security/jwt'
 
 export default class Register extends Component {
   constructor(props) {
@@ -50,7 +51,7 @@ export default class Register extends Component {
   render() {
     return (
       <div>
-        <Header />
+      <Header changeButtonToCreate={redirectToLogin()}/>
         <div className="container">
           <form
             className="text-center border border-light"

@@ -10,3 +10,10 @@
 .deleteItem {
   cursor: pointer;
 }
+
+.completed{
+  color:lime
+}
+.notCompleted{
+  color: #ec3e3e
+}

@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { createTask } from "../action/Action";
+import { createTask, empties } from "../action/Action";
 import "../css/add.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import { getJwtFromSession, redirectToLogin } from "../security/jwt";
-import Header from "./Header"
+import Header from "./Header";
 
 export default class Add extends Component {
   constructor() {
@@ -19,7 +19,8 @@ export default class Add extends Component {
       end_date: "",
       min_date: new Date(),
       error: {},
-      token: ""
+      token: "",
+      empties: []
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -39,6 +40,12 @@ export default class Add extends Component {
 
     this.setState({
       token: tempToken
+    });
+
+    empties().then(res => {
+      this.setState({
+        empties: res.data
+      });
     });
   }
 
@@ -108,9 +115,10 @@ export default class Add extends Component {
   }
 
   render() {
+  
     return (
       <div>
-        <Header />
+        <Header changeButtonToCreate={redirectToLogin()} />
         <div className="container">
           <form
             className="text-center border border-light"
@@ -179,6 +187,12 @@ export default class Add extends Component {
                 />
               </div>
             </div>
+
+            <MultiSelect
+              options={options}
+              selected={selected}
+              onSelectedChanged={selected => this.setState({ selected })}
+            />
 
             <button className="btn btn-info btn-block" type="submit">
               Send

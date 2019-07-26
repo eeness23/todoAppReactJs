@@ -28,7 +28,6 @@ const redirectToLogin = () => {
     let currentTime = Date.now() / 1000;
     let expTime = decodeToken(getJwtFromSession()).exp;
     if(expTime<currentTime){
-      sessionStorage.removeItem("Authorization");
       return true;
     }
     return false;

@@ -1,13 +1,12 @@
 import axios from "axios";
-import { TASKS_URL, REGISTER_URL, LOGIN_URL } from "./urls";
-import {getHeader} from "../security/jwt"
+import { TASKS_URL, REGISTER_URL, LOGIN_URL,EMPTIES_URL } from "./urls";
 
   const createTask = (task) => {
     return axios.post(TASKS_URL, task);
   }
 
-  const getAllTasks = () => {
-    return axios.get(TASKS_URL);
+  const getAllTasks =async () => {
+    return await axios.get(TASKS_URL);
   }
 
   const getTaskById = (taskId) => {
@@ -26,6 +25,10 @@ import {getHeader} from "../security/jwt"
     return await axios.post(LOGIN_URL,user);
   }
 
-  export {createTask,getAllTasks,getTaskById,deleteById,register,login}
+  const empties = async () => {
+    return await axios.get(EMPTIES_URL);
+  }
+
+  export {createTask,getAllTasks,getTaskById,deleteById,register,login,empties}
   
 

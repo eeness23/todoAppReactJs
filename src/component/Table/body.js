@@ -4,7 +4,6 @@ import edit from "../../image/edit.png";
 import remove from "../../image/delete.png";
 import { Link,withRouter } from "react-router-dom";
 
-
 class body extends Component {
   constructor(props) {
     super(props);
@@ -41,6 +40,7 @@ class body extends Component {
   reflesh() {
     getAllTasks()
       .then(res => {
+        console.log(res);
         this.setState({
           tasks: res.data,
           loading: false
@@ -71,6 +71,10 @@ class body extends Component {
               <td>{task.start_date}</td>
               <td>{task.updated_at}</td>
               <td>{task.end_date}</td>
+              <td>{task.subTasks.map(sub =>{
+                  return <div>{sub.taskIdentifier}</div>
+              })}</td>
+              <td className={task.completed ? "completed" : "notCompleted"}>{task.completed ? "Completed":"Not Completed"}</td>
               <td>
                 <Link to={`/tasks/${task.taskIdentifier}`}>
                   <img src={edit} alt="edit" width="30px" />

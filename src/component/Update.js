@@ -21,7 +21,10 @@ export default class Update extends Component {
       end_date: "",
       min_date: new Date(),
       error: {},
-      loading: true
+      loading: true,
+      completed: false,
+      dependencies: "",
+      subTasks:[]
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -63,7 +66,10 @@ export default class Update extends Component {
         desc: res.data.desc,
         start_date: start_date,
         end_date: end_date,
-        min_date: new Date()
+        min_date: new Date(),
+        completed: res.data.completed,
+        dependencies:"",
+        subTasks:res.data.subTasks
       });
     });
   }
@@ -113,7 +119,9 @@ export default class Update extends Component {
       taskIdentifier: this.state.taskIdentifier,
       desc: this.state.desc,
       start_date: start_date,
-      end_date: end_date
+      end_date: end_date,
+      completed: this.state.completed,
+      subTasks:this.state.subTasks
     };
 
     createTask(newTask)
@@ -124,10 +132,15 @@ export default class Update extends Component {
         });
       })
       .catch(err => {
+        console.log(err);
         if (err.response.status == 401) {
           this.props.history.push({
             pathname: "/login",
             state: { mustLogin: true }
+          });
+        } else if (err.response.data.dependencies !== null) {
+          this.setState({
+            dependencies: err.response.data.dependencies
           });
         } else {
           this.setState({
@@ -140,13 +153,16 @@ export default class Update extends Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header changeButtonToCreate={redirectToLogin()} />
         <div className="container">
+        {this.state.dependencies!=="" && <div class="alert alert-danger" role="alert">
+             {this.state.dependencies}
+          </div>}
           <form
             className="text-center border border-light"
             onSubmit={this.onSubmit}
           >
-            <p className="h4 mb-4">Create New Task</p>
+            <p className="h4 mb-4">Update Task</p>
 
             <div className="form-group mb-4">
               <input
@@ -195,6 +211,33 @@ export default class Update extends Component {
                   minDate={this.state.min_date}
                 />
               </div>
+            </div>
+
+            <div className="form-group mb-4">
+              <textarea
+                name="desc"
+                className="form-control rounded-0"
+                rows="3"
+                placeholder="Description"
+                value={this.state.desc}
+                onChange={this.onChange}
+              />
+              <div className="validate">{this.state.error.desc}</div>
+            </div>
+
+            <div class="form-inline mb-4">
+              <label class="col" for="completed">
+                Status
+              </label>
+              <select
+                value={this.state.completed}
+                onChange={this.onChange}
+                class="form-control col"
+                name="completed"
+              >
+                <option value={true}>Completed</option>
+                <option value={false}>Not Completed</option>
+              </select>
             </div>
 
             <button className="btn btn-info btn-block" type="submit">

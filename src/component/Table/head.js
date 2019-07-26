@@ -11,6 +11,8 @@ const head = () => {
         <th scope="col">Start Date</th>
         <th scope="col">Update Date</th>
         <th scope="col">End Date</th>
+        <th scope="col">Dependencies</th>
+        <th scope="col">Status</th>
         <th scope="col"></th>
         <th scope="col"></th>
       </tr>

@@ -1,7 +1,6 @@
 import axios from "axios";
 import { TASKS_URL, REGISTER_URL, LOGIN_URL } from "./urls";
-import {setJwtToken} from "../security/jwt";
-import jwt_decode from "jwt-decode"
+import {getHeader} from "../security/jwt"
 
   const createTask = (task) => {
     return axios.post(TASKS_URL, task);
@@ -24,17 +23,7 @@ import jwt_decode from "jwt-decode"
   }
 
   const login = async (user) => {
-    const res = await axios.post(LOGIN_URL,user);
-  
-    const {token} = res.data;
-
-    sessionStorage.setItem("Authorization",token);
-
-    setJwtToken(token);
-
-    const decodeToken = jwt_decode(token);
-
-     console.log(decodeToken);
+    return await axios.post(LOGIN_URL,user);
   }
 
   export {createTask,getAllTasks,getTaskById,deleteById,register,login}

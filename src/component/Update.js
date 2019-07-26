@@ -4,6 +4,7 @@ import "../css/add.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import Header from "./Header"
 
 export default class Update extends Component {
   constructor() {
@@ -109,9 +110,6 @@ export default class Update extends Component {
       end_date: end_date
     };
 
-    console.log(newTask);
-  
-
     createTask(newTask)
       .then(res => {
         this.props.history.push({
@@ -120,14 +118,24 @@ export default class Update extends Component {
         });
       })
       .catch(err => {
-        this.setState({
-          error: err.response.data
-        });
+        if (err.response.status == 401) {
+          this.props.history.push({
+            pathname: "/login",
+            state: { mustLogin: true }
+          });
+        } else {
+          this.setState({
+            error: err.response.data
+          });
+        }
       });
   }
 
   render() {
     return (
+      <div>
+        <Header />
+        <div className="container">
       <form
         className="text-center border border-light p-5"
         onSubmit={this.onSubmit}
@@ -187,6 +195,8 @@ export default class Update extends Component {
           Send
         </button>
       </form>
+      </div>
+      </div>
     );
   }
 }

@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import {Link} from "react-router-dom"
-import {login} from "../action/Action";
-import {setJwtToken} from "../security/jwt"
+import { Link } from "react-router-dom";
+import { login } from "../action/Action";
+import Header from "./Header";
+import {setJwtToSession} from "../security/jwt"
 
 export default class Login extends Component {
   constructor(props) {
@@ -9,13 +10,17 @@ export default class Login extends Component {
 
     this.state = {
       createUser: false,
-      username:"",
-      password:""
+      username: "",
+      password: "",
+      mustLogin: "",
+      error: ""
     };
 
     if (this.props.location.state) {
       this.state = {
+        ...this.state,
         createUser: this.props.location.state.createUser,
+        mustLogin: this.props.location.state.mustLogin
       };
     }
 
@@ -31,51 +36,83 @@ export default class Login extends Component {
 
   onSubmit(e) {
     e.preventDefault();
+
     const user = {
-      username:this.state.username,
-      password:this.state.password
-    }
+      username: this.state.username,
+      password: this.state.password
+    };
+
     login(user)
+      .then(res => {
+        setJwtToSession(res.data.token)
+        this.props.history.push({
+          pathname: "/",
+          state: { welcome: true }
+        });
+      })
+      .catch(err => {
+        this.setState({
+          error: err.response.data
+        });
+      });
   }
 
   render() {
     return (
-      <form className="text-center border border-light p-5" onSubmit={this.onSubmit}>
-        {this.state.createUser && (
-          <div class="alert alert-success" role="alert">
-            Register successfull
-          </div>
-        )}
-        <p className="h4 mb-4">Sign in</p>
-        <input
-          type="email"
-          name="username"
-          id="defaultLoginFormEmail"
-          className="form-control mb-4"
-          placeholder="E-mail"
-          value={this.state.username}
-          onChange={this.onChange}
-        />
+      <div>
+        <Header />
+        <div className="container">
+          <form
+            className="text-center border border-light"
+            onSubmit={this.onSubmit}
+          >
+            {this.state.createUser && (
+              <div class="alert alert-success" role="alert">
+                Register successfull
+              </div>
+            )}
+            {this.state.mustLogin && (
+              <div class="alert alert-danger" role="alert">
+                You have to login
+              </div>
+            )}
+            <p className="h4 mb-4">Sign in</p>
+            <div className="form-group mb-4">
+              <input
+                type="email"
+                name="username"
+                id="defaultLoginFormEmail"
+                className="form-control"
+                placeholder="E-mail"
+                value={this.state.username}
+                onChange={this.onChange}
+              />
+              <div className="validate">{this.state.error.username}</div>
+            </div>
 
-        <input
-          type="password"
-          name="password"
-          className="form-control mb-4"
-          placeholder="Password"
-          value={this.state.password}
-          onChange={this.onChange}
-        />
+            <div className="form-group mb-4">
+              <input
+                type="password"
+                name="password"
+                className="form-control"
+                placeholder="Password"
+                value={this.state.password}
+                onChange={this.onChange}
+              />
+              <div className="validate">{this.state.error.password}</div>
+            </div>
 
-        <button className="btn btn-info btn-block my-4" type="submit">
-          Sign in
-        </button>
+            <button className="btn btn-info btn-block mb-2" type="submit">
+              Sign in
+            </button>
 
-        <p>
-          Not a member? 
-          <Link to="/register"> Register</Link>
-        </p>
-
-      </form>
+            <p>
+              Not a member?
+              <Link to="/register"> Register</Link>
+            </p>
+          </form>
+        </div>
+      </div>
     );
   }
 }

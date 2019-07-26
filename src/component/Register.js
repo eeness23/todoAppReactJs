@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import {register} from "../action/Action";
+import { register } from "../action/Action";
+import Header from "./Header";
 
 export default class Register extends Component {
   constructor(props) {
@@ -32,82 +33,88 @@ export default class Register extends Component {
     };
     console.log(newUser);
 
-    
-      register(newUser)
-      .then(()=>{
+    register(newUser)
+      .then(() => {
         this.props.history.push({
           pathname: "/login",
-          state : {createUser : true}
-        })
+          state: { createUser: true }
+        });
       })
       .catch(err => {
         this.setState({
           error: err.response.data
-        })
+        });
       });
   }
 
   render() {
     return (
-      <form
-        className="text-center border border-light"
-        onSubmit={this.onSubmit}
-      >
-        <p className="h4 mb-4">Sign up</p>
-        <div className="form-group mb-4">
-          <input
-            type="text"
-            name="fullName"
-            className="form-control"
-            placeholder="Full Name"
-            value={this.state.fullName}
-            onChange={this.onChange}
-          />
-          <div className="validate">{this.state.error.fullName}</div>
+      <div>
+        <Header />
+        <div className="container">
+          <form
+            className="text-center border border-light"
+            onSubmit={this.onSubmit}
+          >
+            <p className="h4 mb-4">Sign up</p>
+            <div className="form-group mb-4">
+              <input
+                type="text"
+                name="fullName"
+                className="form-control"
+                placeholder="Full Name"
+                value={this.state.fullName}
+                onChange={this.onChange}
+              />
+              <div className="validate">{this.state.error.fullName}</div>
+            </div>
+
+            <div className="form-group mb-4">
+              <input
+                type="email"
+                name="username"
+                className="form-control"
+                placeholder="Email"
+                value={this.state.username}
+                onChange={this.onChange}
+              />
+              <div className="validate">{this.state.error.username}</div>
+            </div>
+
+            <div className="form-row mb-4">
+              <div className="col">
+                <input
+                  type="password"
+                  name="password"
+                  className="form-control"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={this.onChange}
+                />
+                <div className="validate">{this.state.error.password}</div>
+              </div>
+
+              <div className="col">
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  className="form-control"
+                  placeholder="ConfirmPassword"
+                  value={this.state.confirmPassword}
+                  onChange={this.onChange}
+                />
+                <div className="validate">
+                  {this.state.error.confirmPassword}
+                </div>
+              </div>
+            </div>
+
+            <button className="btn btn-info btn-block" type="submit">
+              Send
+            </button>
+          </form>
         </div>
-
-        <div className="form-group mb-4">
-          <input
-            type="email"
-            name="username"
-            className="form-control"
-            placeholder="Email"
-            value={this.state.username}
-            onChange={this.onChange}
-          />
-          <div className="validate">{this.state.error.username}</div>
-        </div>
-
-        <div className="form-row mb-4">
-          <div className="col">
-            <input
-              type="password"
-              name="password"
-              className="form-control"
-              placeholder="Password"
-              value={this.state.password}
-              onChange={this.onChange}
-            />
-            <div className="validate">{this.state.error.password}</div>
-          </div>
-
-          <div className="col">
-            <input
-              type="password"
-              name="confirmPassword"
-              className="form-control"
-              placeholder="ConfirmPassword"
-              value={this.state.confirmPassword}
-              onChange={this.onChange}
-            />
-            <div className="validate">{this.state.error.confirmPassword}</div>
-          </div>
-        </div>
-
-        <button className="btn btn-info btn-block" type="submit">
-          Send
-        </button>
-      </form>
+      </div>
     );
   }
 }

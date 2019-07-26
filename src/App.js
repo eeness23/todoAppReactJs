@@ -18,8 +18,7 @@ class App extends Component {
 
     return (
       <BrowserRouter>
-      <Header/>
-      <div className="container">
+  
           <Switch>
             <Route exact path="/" component={Table} />
             <Route component={Add} path="/add"/>
@@ -28,7 +27,7 @@ class App extends Component {
             <Route path="/tasks/:taskId" component={Update} />
             <Route path="*" component={ErrorPage} />
           </Switch>
-          </div>
+  
       </BrowserRouter>
     );
   }

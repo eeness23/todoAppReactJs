@@ -4,7 +4,8 @@ import "../css/add.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
-import {getJwtFromSession,redirectToLogin} from "../security/jwt"
+import { getJwtFromSession, redirectToLogin } from "../security/jwt";
+import Header from "./Header"
 
 export default class Add extends Component {
   constructor() {
@@ -18,7 +19,7 @@ export default class Add extends Component {
       end_date: "",
       min_date: new Date(),
       error: {},
-      token:""
+      token: ""
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -26,20 +27,19 @@ export default class Add extends Component {
     this.handleChangeStart = this.handleChangeStart.bind(this);
   }
 
-  componentDidMount(){
-    if(redirectToLogin()){
+  componentDidMount() {
+    if (redirectToLogin()) {
       this.props.history.push({
         pathname: "/login",
         state: { mustLogin: true }
       });
     }
 
-
     let tempToken = getJwtFromSession();
 
     this.setState({
       token: tempToken
-    })
+    });
   }
 
   onChange(e) {
@@ -91,7 +91,7 @@ export default class Add extends Component {
         this.props.history.push({
           pathname: "/",
           state: { createNew: res.data.taskIdentifier }
-        });   
+        });
       })
       .catch(err => {
         if (err.response.status === 401) {
@@ -109,6 +109,9 @@ export default class Add extends Component {
 
   render() {
     return (
+      <div>
+        <Header />
+        <div className="container">
           <form
             className="text-center border border-light"
             onSubmit={this.onSubmit}
@@ -181,6 +184,8 @@ export default class Add extends Component {
               Send
             </button>
           </form>
+        </div>
+      </div>
     );
   }
 }

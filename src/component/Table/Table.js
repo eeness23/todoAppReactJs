@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import Thead from "./head";
 import Tbody from "./body";
 import "../../css/table.css";
-import {getJwtFromSession,decodeToken} from "../../security/jwt"
+import { getJwtFromSession, decodeToken } from "../../security/jwt";
+import Header from "../Header"
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -12,12 +13,13 @@ export default class Dashboard extends Component {
       createNew: "",
       update: "",
       fullName: "",
-      delete:false,
-      deleteTaskName:""
+      delete: false,
+      deleteTaskName: ""
     };
 
     if (this.props.location.state) {
-      this.state = { ...this.state,
+      this.state = {
+        ...this.state,
         createNew: this.props.location.state.createNew,
         update: this.props.location.state.update,
         fullName: this.props.location.state.fullName
@@ -27,23 +29,24 @@ export default class Dashboard extends Component {
     this.deleteAlert = this.deleteAlert.bind(this);
   }
 
-  componentDidMount(){
-    if(getJwtFromSession()!=="null"){
-
+  componentDidMount() {
+    if (getJwtFromSession() !== "null") {
       console.log(decodeToken(getJwtFromSession()));
-
     }
   }
 
-  deleteAlert(deleteTaskName){
+  deleteAlert(deleteTaskName) {
     this.setState({
-      delete : true,
-      deleteTaskName : deleteTaskName
-    })
+      delete: true,
+      deleteTaskName: deleteTaskName
+    });
   }
 
   render() {
     return (
+      <div>
+        <Header />
+        <div className="container">
           <div className="mt-4">
             {this.state.createNew !== "" && this.state.createNew != null && (
               <div class="alert alert-success" role="alert">
@@ -70,6 +73,8 @@ export default class Dashboard extends Component {
               <Tbody deleteCallBack={this.deleteAlert} />
             </table>
           </div>
+        </div>
+      </div>
     );
   }
 }

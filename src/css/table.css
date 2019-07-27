@@ -11,9 +11,18 @@
   cursor: pointer;
 }
 
-.completed{
-  color:lime
+.completed {
+  color: lime;
 }
-.notCompleted{
-  color: #ec3e3e
+.notCompleted {
+  color: #ec3e3e;
+}
+
+.nav-sort {
+  margin-left: auto;
+  margin-right: 0px;
+}
+
+.pointer{
+  cursor: pointer;
 }

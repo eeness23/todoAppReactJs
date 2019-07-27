@@ -101,10 +101,8 @@ export default class Add extends Component {
       desc: this.state.desc,
       start_date: start_date,
       end_date: end_date,
-      subTasks: this.state.subTasks
+      subTasks: this.state.subTasks,
     };
-
-    console.log(newTask);
 
     createTask(newTask)
       .then(res => {

@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { getTaskById, createTask } from "../action/Action";
+import { getTaskById, createTask,emptiesOrIsSelf } from "../action/Action";
 import "../css/add.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import { redirectToLogin } from "../security/jwt";
 import Header from "./Header";
+import "@kenshooui/react-multi-select/dist/style.css";
+import MultiSelect from "@kenshooui/react-multi-select";
 
 export default class Update extends Component {
   constructor() {
@@ -24,12 +26,14 @@ export default class Update extends Component {
       loading: true,
       completed: false,
       dependencies: "",
-      subTasks:[]
+      empties: [],
+      subTasks: []
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.handleChangeEnd = this.handleChangeEnd.bind(this);
     this.handleChangeStart = this.handleChangeStart.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -72,6 +76,16 @@ export default class Update extends Component {
         subTasks:res.data.subTasks
       });
     });
+
+    emptiesOrIsSelf(taskId).then(res => {
+      this.setState({
+        empties:res.data
+      })
+    })
+  }
+
+  handleChange(subTasks) {
+    this.setState({ subTasks:subTasks });
   }
 
   onChange(e) {
@@ -81,8 +95,6 @@ export default class Update extends Component {
   }
 
   handleChangeStart(date) {
-    console.log(this.state.end_date);
-
     if (date > this.state.end_date && this.state.end_date != null) {
       this.setState({
         end_date: date
@@ -124,6 +136,9 @@ export default class Update extends Component {
       subTasks:this.state.subTasks
     };
 
+    console.log(newTask);
+
+    
     createTask(newTask)
       .then(res => {
         this.props.history.push({
@@ -148,6 +163,7 @@ export default class Update extends Component {
           });
         }
       });
+      
   }
 
   render() {
@@ -213,19 +229,17 @@ export default class Update extends Component {
               </div>
             </div>
 
-            <div className="form-group mb-4">
-              <textarea
-                name="desc"
-                className="form-control rounded-0"
-                rows="3"
-                placeholder="Description"
-                value={this.state.desc}
-                onChange={this.onChange}
-              />
-              <div className="validate">{this.state.error.desc}</div>
-            </div>
+            <div className="form-group">
+            <label> Select Child Tasks </label>
+            <p> *Parent Task can not complete until Child Tasks are completed </p>
+            <MultiSelect
+              items={this.state.empties}
+              selectedItems={this.state.subTasks}
+              onChange={this.handleChange}
+            />
+          </div>
 
-            <div class="form-inline mb-4">
+            <div class="form-inline mt-4 mb-4">
               <label class="col" for="completed">
                 Status
               </label>

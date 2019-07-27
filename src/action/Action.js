@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TASKS_URL, REGISTER_URL, LOGIN_URL,EMPTIES_URL } from "./urls";
+import { TASKS_URL, REGISTER_URL, LOGIN_URL,EMPTIES_URL,EMPTIES_OR_SELF_URL} from "./urls";
 
   const createTask = (task) => {
     return axios.post(TASKS_URL, task);
@@ -29,6 +29,10 @@ import { TASKS_URL, REGISTER_URL, LOGIN_URL,EMPTIES_URL } from "./urls";
     return await axios.get(EMPTIES_URL);
   }
 
-  export {createTask,getAllTasks,getTaskById,deleteById,register,login,empties}
+  const emptiesOrIsSelf = async (taskId) => {
+    return await axios.get(EMPTIES_OR_SELF_URL+"/"+taskId)
+  }
+
+  export {createTask,getAllTasks,getTaskById,deleteById,register,login,empties,emptiesOrIsSelf}
   
 

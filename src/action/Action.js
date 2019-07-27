@@ -5,7 +5,7 @@ import { TASKS_URL, REGISTER_URL, LOGIN_URL,EMPTIES_URL,EMPTIES_OR_SELF_URL} fro
     return axios.post(TASKS_URL, task);
   }
 
-  const getAllTasks =async () => {
+  const getAllTasks = async () => {
     return await axios.get(TASKS_URL);
   }
 

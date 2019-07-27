@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import Thead from "./head";
 import Tbody from "./body";
 import "../../css/table.css";
-import { getJwtFromSession, decodeToken,redirectToLogin } from "../../security/jwt";
+import {redirectToLogin} from "../../security/jwt";
 import Header from "../Header"
+import { getAllTasks, deleteById } from "../../action/Action"
 
 export default class Dashboard extends Component {
   constructor(props) {
@@ -14,7 +15,8 @@ export default class Dashboard extends Component {
       update: "",
       fullName: "",
       delete: false,
-      deleteTaskName: ""
+      deleteTaskName: "",
+      tasks:[]
     };
 
     if (this.props.location.state) {
@@ -27,13 +29,51 @@ export default class Dashboard extends Component {
     }
 
     this.deleteAlert = this.deleteAlert.bind(this);
+    this.reflesh=this.reflesh.bind(this);
+    this.deleteTask=this.deleteTask.bind(this);
   }
 
+
   componentDidMount() {
-    if (getJwtFromSession() !== "null") {
-      console.log(decodeToken(getJwtFromSession()));
-    }
+    this.reflesh();
+    console.log("componentDidMount");
   }
+
+  reflesh() {
+    getAllTasks()
+      .then(res => {
+        this.setState({
+          tasks:res.data
+        })
+      })
+      .catch(err =>{
+        if(err.response.status==401){
+          this.props.history.push({
+            pathname: "/login",
+            state: { mustLogin: true }
+          });
+        };
+      })
+
+      console.log("4"+this.state.tasks);
+  }
+
+  deleteTask(taskId) {
+    deleteById(taskId)
+      .then( () =>{
+        this.reflesh();
+        this.deleteAlert(taskId);
+      })
+      .catch(err =>{
+        if(err.response.status==401){
+          this.props.history.push({
+            pathname: "/login",
+            state: { mustLogin: true }
+          });
+        };
+      })
+  }
+
 
   deleteAlert(deleteTaskName) {
     this.setState({
@@ -70,7 +110,7 @@ export default class Dashboard extends Component {
             )}
             <table className="table table-hover table-dark text-center">
               <Thead />
-              <Tbody deleteCallBack={this.deleteAlert} />
+              <Tbody tasks={this.state.tasks} deleteCallBack={this.deleteTask} />
             </table>
           </div>
         </div>

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { getAllTasks, deleteById } from "../../action/Action";
 import edit from "../../image/edit.png";
 import remove from "../../image/delete.png";
 import { Link,withRouter } from "react-router-dom";
@@ -9,54 +8,18 @@ class body extends Component {
     super(props);
 
     this.state = {
-      tasks: [],
-      loading: true
+      tasks: this.props.tasks
     };
-    
-    this.reflesh = this.reflesh.bind(this);
-    this.deleteTask = this.deleteTask.bind(this);
   }
 
-  componentDidMount() {
-    this.reflesh();
-  }
-
-  deleteTask(taskId) {
-    deleteById(taskId)
-      .then( () =>{
-        this.reflesh();
-        this.props.deleteCallBack(taskId);
-      })
-      .catch(err =>{
-        if(err.response.status==401){
-          this.props.history.push({
-            pathname: "/login",
-            state: { mustLogin: true }
-          });
-        };
-      })
-  }
-
-  reflesh() {
-    getAllTasks()
-      .then(res => {
-        console.log(res);
-        this.setState({
-          tasks: res.data,
-          loading: false
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
+ componentWillReceiveProps(props){
+   const{tasks}=props
+   this.setState({
+     tasks:tasks
+   })
+ }
 
   render() {
-    // Loadin icon can be added.
-    if (this.state.loading === true) {
-      return null;
-    }
-
     return (
       <tbody>
         {this.state.tasks.map(task => {
@@ -86,7 +49,7 @@ class body extends Component {
                   alt="remove"
                   width="30px"
                   onClick={() => {
-                    this.deleteTask(task.taskIdentifier);
+                    this.props.deleteCallBack(task.taskIdentifier);
                   }}
                 />
               </td>

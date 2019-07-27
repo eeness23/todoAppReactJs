@@ -6,6 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import { getJwtFromSession, redirectToLogin } from "../security/jwt";
 import Header from "./Header";
+import "@kenshooui/react-multi-select/dist/style.css";
+import MultiSelect from "@kenshooui/react-multi-select";
 
 export default class Add extends Component {
   constructor() {
@@ -20,12 +22,16 @@ export default class Add extends Component {
       min_date: new Date(),
       error: {},
       token: "",
-      empties: []
+      empties: [],
+      subTasks: [],
+      selectedItems: []
     };
+
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.handleChangeEnd = this.handleChangeEnd.bind(this);
     this.handleChangeStart = this.handleChangeStart.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -42,11 +48,15 @@ export default class Add extends Component {
       token: tempToken
     });
 
-    empties().then(res => {
+    empties().then(res =>
       this.setState({
         empties: res.data
-      });
-    });
+      })
+    );
+  }
+
+  handleChange(subTasks) {
+    this.setState({ subTasks });
   }
 
   onChange(e) {
@@ -90,8 +100,11 @@ export default class Add extends Component {
       taskIdentifier: this.state.taskIdentifier,
       desc: this.state.desc,
       start_date: start_date,
-      end_date: end_date
+      end_date: end_date,
+      subTasks: this.state.subTasks
     };
+
+    console.log(newTask);
 
     createTask(newTask)
       .then(res => {
@@ -115,7 +128,6 @@ export default class Add extends Component {
   }
 
   render() {
-  
     return (
       <div>
         <Header changeButtonToCreate={redirectToLogin()} />
@@ -188,13 +200,17 @@ export default class Add extends Component {
               </div>
             </div>
 
-            <MultiSelect
-              options={options}
-              selected={selected}
-              onSelectedChanged={selected => this.setState({ selected })}
-            />
+            <div className="form-group">
+              <label> Select Child Tasks </label>
+              <p> *Parent Task can not complete until Child Tasks are completed </p>
+              <MultiSelect
+                items={this.state.empties}
+                selectedItems={this.state.subTasks}
+                onChange={this.handleChange}
+              />
+            </div>
 
-            <button className="btn btn-info btn-block" type="submit">
+            <button className="btn btn-info btn-block mt-4" type="submit">
               Send
             </button>
           </form>

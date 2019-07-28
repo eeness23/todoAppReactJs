@@ -17,11 +17,11 @@ export default class Dashboard extends Component {
       fullName: "",
       delete: false,
       deleteTaskName: "",
+      activeSortType: "taskId",
       tasks: [],
-      active: "",
-      filterTasks:[],
-      completedClick:false,
-      completedFilter:[]
+      tasksAll: [],
+      filter: "",
+      completed: "all"
     };
 
     if (this.props.location.state) {
@@ -34,7 +34,6 @@ export default class Dashboard extends Component {
     }
 
     this.deleteAlert = this.deleteAlert.bind(this);
-    this.reflesh = this.reflesh.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
     this.sortByTaskName = this.sortByTaskName.bind(this);
     this.sortByEndDate = this.sortByEndDate.bind(this);
@@ -44,16 +43,12 @@ export default class Dashboard extends Component {
   }
 
   componentDidMount() {
-    this.reflesh();
-  }
-
-  reflesh() {
     getAllTasks()
       .then(res => {
         this.setState({
           tasks: res.data,
-          filterTasks:res.data
-        });
+          tasksAll: res.data
+        },this.sortById);
       })
       .catch(err => {
         if (err.response.status === 401) {
@@ -68,7 +63,7 @@ export default class Dashboard extends Component {
   deleteTask(taskId) {
     deleteById(taskId)
       .then(() => {
-        this.reflesh();
+        this.deleteOnTask(taskId);
         this.deleteAlert(taskId);
       })
       .catch(err => {
@@ -80,31 +75,61 @@ export default class Dashboard extends Component {
         }
       });
   }
+  
+  deleteOnTask(taskId){
+    const newTasks = this.state.tasks.filter(task =>{
+     return task.taskIdentifier !==taskId
+    })
+
+    const newTasksAll=this.state.tasksAll.filter(task =>{
+      return task.taskIdentifier !==taskId
+     })
+
+     this.setState({
+       tasks:newTasks,
+       tasksAll:newTasksAll
+     })
+  }
+  
+  deleteAlert(deleteTaskName) {
+    this.setState({
+      delete: true,
+      deleteTaskName: deleteTaskName
+    });
+  }
 
   sortById() {
-    let { tasks } = this.state;
+    let { tasks, tasksAll } = this.state;
     tasks.sort((a, b) => {
+      return a.taskIdentifier.localeCompare(b.taskIdentifier);
+    });
+    tasksAll.sort((a, b) => {
       return a.taskIdentifier.localeCompare(b.taskIdentifier);
     });
     this.setState({
       tasks: tasks,
-      active: "taskId"
+      tasksAll: tasksAll,
+      activeSortType: "taskId"
     });
   }
 
   sortByTaskName() {
-    let { tasks } = this.state;
+    let { tasks, tasksAll } = this.state;
     tasks.sort((a, b) => {
+      return a.taskName.localeCompare(b.taskName);
+    });
+    tasksAll.sort((a, b) => {
       return a.taskName.localeCompare(b.taskName);
     });
     this.setState({
       tasks: tasks,
-      active: "taskName"
+      tasksAll: tasksAll,
+      activeSortType: "taskName"
     });
   }
 
   sortByEndDate() {
-    let { tasks } = this.state;
+    let { tasks, tasksAll } = this.state;
     tasks.sort((a, b) => {
       if (a.end_date === null) {
         a.end_date = "99/99/9999";
@@ -112,9 +137,14 @@ export default class Dashboard extends Component {
       if (b.end_date === null) {
         b.end_date = "99/99/9999";
       }
-
-      let dateA = a.end_date.split("/").reverse().join(),
-        dateB = b.end_date.split("/").reverse().join();
+      let dateA = a.end_date
+          .split("/")
+          .reverse()
+          .join(),
+        dateB = b.end_date
+          .split("/")
+          .reverse()
+          .join();
 
       if (a.end_date === "99/99/9999") {
         a.end_date = null;
@@ -124,72 +154,102 @@ export default class Dashboard extends Component {
       }
       return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
     });
+
+    tasksAll.sort((a, b) => {
+      if (a.end_date === null) {
+        a.end_date = "99/99/9999";
+      }
+      if (b.end_date === null) {
+        b.end_date = "99/99/9999";
+      }
+      let dateA = a.end_date
+          .split("/")
+          .reverse()
+          .join(),
+        dateB = b.end_date
+          .split("/")
+          .reverse()
+          .join();
+
+      if (a.end_date === "99/99/9999") {
+        a.end_date = null;
+      }
+      if (b.end_date === "99/99/9999") {
+        b.end_date = null;
+      }
+      return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
+    });
+
     this.setState({
       tasks: tasks,
-      active: "endDate"
+      tasksAll: tasksAll,
+      activeSortType: "endDate"
     });
   }
 
+  filter(e) {
+    const { completed } = this.state;
+    e = e.toLowerCase();
+    const newTask = this.state.tasksAll.filter(task => {
+      if (completed === "all") {
+        return (
+          task.taskIdentifier.toLowerCase().indexOf(e) !== -1 ||
+          task.taskName.toLowerCase().indexOf(e) !== -1
+        );
+      } else {
+        return (
+          (task.taskIdentifier.toLowerCase().indexOf(e) !== -1 ||
+            task.taskName.toLowerCase().indexOf(e) !== -1) &&
+          task.completed.toString() === completed
+        );
+      }
+    });
 
-  filter(e){
-    if(!this.state.completedClick){
-      const newTask=this.state.filterTasks.filter(task =>{
-        return task.taskIdentifier.toLowerCase().indexOf(e.toLowerCase()) !== -1 ||
-        task.taskName.toLowerCase().indexOf(e.toLowerCase()) !== -1
-      });
-  
-      this.setState({
-        tasks:newTask
-      });
-    }else{
-      let tempTask=this.state.completedFilter;
-      const newTask=tempTask.filter(task =>{
-        return task.taskIdentifier.toLowerCase().indexOf(e.toLowerCase()) !== -1 ||
-        task.taskName.toLowerCase().indexOf(e.toLowerCase()) !== -1
-      });
-  
-      this.setState({
-        tasks:newTask
-      });
-
-    }
-  }
-
-  completed(completed){
-    if(completed==="all"){
-      this.setState({
-        tasks:this.state.filterTasks,
-        completedClick:false
-      });
-    }else if(completed==="true"){
-      const newTask= this.state.filterTasks.filter(task =>{
-        return task.completed===true
-   
-      });
-      this.setState({
-        tasks:newTask,
-        completedClick:true,
-        completedFilter:newTask
-      });
-    }else{
-      const newTask= this.state.filterTasks.filter(task =>{
-        return task.completed===false
-      });
-      this.setState({
-        tasks:newTask,
-        completedClick:true,
-        completedFilter:newTask
-      });
-    }
-  }
-
-
-
-  deleteAlert(deleteTaskName) {
     this.setState({
-      delete: true,
-      deleteTaskName: deleteTaskName
+      tasks: newTask,
+      filter: e.toLowerCase()
     });
+  }
+
+  completed(completed) {
+    if (completed === "all") {
+      const newTask = this.state.tasksAll.filter(task => {
+        return (
+          task.taskIdentifier.toLowerCase().indexOf(this.state.filter) !== -1 ||
+          task.taskName.toLowerCase().indexOf(this.state.filter) !== -1
+        );
+      });
+      this.setState({
+        tasks: newTask,
+        completed: completed
+      });
+    } else if (completed === "true") {
+      const newTask = this.state.tasksAll.filter(task => {
+        return (
+          task.completed === true &&
+          (task.taskIdentifier.toLowerCase().indexOf(this.state.filter) !==
+            -1 ||
+            task.taskName.toLowerCase().indexOf(this.state.filter) !== -1)
+        );
+      });
+      this.setState({
+        tasks: newTask,
+        completed: completed
+      });
+    } else {
+      const newTask = this.state.tasksAll.filter(task => {
+        return (
+          task.completed === false &&
+          (task.taskIdentifier.toLowerCase().indexOf(this.state.filter) !==
+            -1 ||
+            task.taskName.toLowerCase().indexOf(this.state.filter) !== -1)
+        );
+      });
+      this.setState({
+        tasks: newTask,
+        completed: completed
+      });
+    }
   }
 
   render() {
@@ -219,12 +279,12 @@ export default class Dashboard extends Component {
               </div>
             )}
             <Sort
-            completed={this.completed}
+              completed={this.completed}
               filter={this.filter}
               taskId={this.sortById}
               endDate={this.sortByEndDate}
               taskName={this.sortByTaskName}
-              active={this.state.active}
+              active={this.state.activeSortType}
             />
             <table className="table table-hover table-dark text-center">
               <Thead />

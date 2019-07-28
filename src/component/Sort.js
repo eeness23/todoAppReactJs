@@ -79,7 +79,7 @@ export default class Sort extends Component {
           All
         </label>
       </div>
-        <div className="form-inline nav-sort">Sort By : </div>
+        <div className="form-inline nav-sort mr-1">Sort By :</div>
         <li className="nav-item" onClick={this.props.taskId}>
           <div
             className={`nav-link pointer ${

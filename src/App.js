@@ -9,6 +9,7 @@ import Login from "./component/Login";
 import Register from "./component/Register";
 import Update from "./component/Update";
 import {setJwtToSession,getJwtFromSession} from "./security/jwt";
+import Footer from "./component/Footer"
 
 
 class App extends Component {
@@ -26,8 +27,9 @@ class App extends Component {
             <Route path="/tasks/:taskId" component={Update} />
             <Route path="*" component={ErrorPage} />
           </Switch>
-  
+      <Footer/>
       </BrowserRouter>
+      
     );
   }
 }

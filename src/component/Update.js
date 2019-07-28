@@ -148,7 +148,7 @@ export default class Update extends Component {
       })
       .catch(err => {
         console.log(err);
-        if (err.response.status == 401) {
+        if (err.response.status === 401) {
           this.props.history.push({
             pathname: "/login",
             state: { mustLogin: true }
@@ -171,7 +171,7 @@ export default class Update extends Component {
       <div>
         <Header changeButtonToCreate={redirectToLogin()} />
         <div className="container">
-        {this.state.dependencies!=="" && <div class="alert alert-danger" role="alert">
+        {this.state.dependencies!=="" && <div className="alert alert-danger" role="alert">
              {this.state.dependencies}
           </div>}
           <form
@@ -239,14 +239,14 @@ export default class Update extends Component {
             />
           </div>
 
-            <div class="form-inline mt-4 mb-4">
-              <label class="col" for="completed">
+            <div className="form-inline mt-4 mb-4">
+              <label className="col" for="completed">
                 Status
               </label>
               <select
                 value={this.state.completed}
                 onChange={this.onChange}
-                class="form-control col"
+                className="form-control col"
                 name="completed"
               >
                 <option value={true}>Completed</option>

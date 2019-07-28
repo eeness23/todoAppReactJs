@@ -56,7 +56,7 @@ export default class Dashboard extends Component {
         });
       })
       .catch(err => {
-        if (err.response.status == 401) {
+        if (err.response.status === 401) {
           this.props.history.push({
             pathname: "/login",
             state: { mustLogin: true }
@@ -72,7 +72,7 @@ export default class Dashboard extends Component {
         this.deleteAlert(taskId);
       })
       .catch(err => {
-        if (err.response.status == 401) {
+        if (err.response.status === 401) {
           this.props.history.push({
             pathname: "/login",
             state: { mustLogin: true }
@@ -116,10 +116,10 @@ export default class Dashboard extends Component {
       let dateA = a.end_date.split("/").reverse().join(),
         dateB = b.end_date.split("/").reverse().join();
 
-      if (a.end_date == "99/99/9999") {
+      if (a.end_date === "99/99/9999") {
         a.end_date = null;
       }
-      if (b.end_date == "99/99/9999") {
+      if (b.end_date === "99/99/9999") {
         b.end_date = null;
       }
       return dateA < dateB ? -1 : dateA > dateB ? 1 : 0;
@@ -156,14 +156,14 @@ export default class Dashboard extends Component {
   }
 
   completed(completed){
-    if(completed=="all"){
+    if(completed==="all"){
       this.setState({
         tasks:this.state.filterTasks,
         completedClick:false
       });
-    }else if(completed=="true"){
+    }else if(completed==="true"){
       const newTask= this.state.filterTasks.filter(task =>{
-        return task.completed==true
+        return task.completed===true
    
       });
       this.setState({
@@ -173,7 +173,7 @@ export default class Dashboard extends Component {
       });
     }else{
       const newTask= this.state.filterTasks.filter(task =>{
-        return task.completed==false
+        return task.completed===false
       });
       this.setState({
         tasks:newTask,
@@ -199,22 +199,22 @@ export default class Dashboard extends Component {
         <div className="container">
           <div className="mt-4">
             {this.state.createNew !== "" && this.state.createNew != null && (
-              <div class="alert alert-success" role="alert">
+              <div className="alert alert-success" role="alert">
                 You Created {this.state.createNew} Task
               </div>
             )}
             {this.state.update !== "" && this.state.update != null && (
-              <div class="alert alert-success" role="alert">
+              <div className="alert alert-success" role="alert">
                 You Updated {this.state.update} Task
               </div>
             )}
             {this.state.fullName !== "" && this.state.fullName != null && (
-              <div class="alert alert-success" role="alert">
+              <div className="alert alert-success" role="alert">
                 Welcome {this.state.fullName}
               </div>
             )}
             {this.state.delete && (
-              <div class="alert alert-danger" role="alert">
+              <div className="alert alert-danger" role="alert">
                 You Deleted {this.state.deleteTaskName}
               </div>
             )}

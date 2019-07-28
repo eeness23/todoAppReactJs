@@ -68,12 +68,12 @@ export default class Login extends Component {
             onSubmit={this.onSubmit}
           >
             {this.state.createUser && (
-              <div class="alert alert-success" role="alert">
+              <div className="alert alert-success" role="alert">
                 Register successfull
               </div>
             )}
             {this.state.mustLogin && (
-              <div class="alert alert-danger" role="alert">
+              <div className="alert alert-danger" role="alert">
                 You have to login
               </div>
             )}

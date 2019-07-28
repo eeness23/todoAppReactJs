@@ -8,8 +8,7 @@ import Add from "./component/Add";
 import Login from "./component/Login";
 import Register from "./component/Register";
 import Update from "./component/Update";
-import {setJwtToSession,getJwtFromSession} from "./security/jwt"
-import Header from "./component/Header";
+import {setJwtToSession,getJwtFromSession} from "./security/jwt";
 
 
 class App extends Component {

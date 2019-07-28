@@ -24,7 +24,7 @@ const decodeToken = token => {
 };
 
 const redirectToLogin = () => {
-  if(getJwtFromSession()!="null"){
+  if(getJwtFromSession()!=="null"){
     let currentTime = Date.now() / 1000;
     let expTime = decodeToken(getJwtFromSession()).exp;
     if(expTime<currentTime){

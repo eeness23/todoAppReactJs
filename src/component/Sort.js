@@ -31,10 +31,10 @@ export default class Sort extends Component {
 
   render() {
     return (
-      <ul class="nav nav-pills mb-1">
-        <div class="active-cyan-3 active-cyan-4">
+      <ul className="nav nav-pills mb-1">
+        <div className="active-cyan-3 active-cyan-4">
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             placeholder="Search Id or Name"
             aria-label="Search"
@@ -43,44 +43,44 @@ export default class Sort extends Component {
           />
         </div>
 
-        <div class="form-check form-check-inline ml-2">
+        <div className="form-check form-check-inline ml-2">
           <input
-            class="form-check-input"
+            className="form-check-input"
             type="radio"
             name="inlineRadioOptions"
             id="true"
             onClick={this.completed}
           />
-          <label class="form-check-label" for="true">
+          <label className="form-check-label" for="true">
             Completed
           </label>
         </div>
-        <div class="form-check form-check-inline">
+        <div className="form-check form-check-inline">
           <input
-            class="form-check-input"
+            className="form-check-input"
             type="radio"
             name="inlineRadioOptions"
             id="false"
             onClick={this.completed}
           />
-          <label class="form-check-label" for="false">
+          <label className="form-check-label" for="false">
             Not Completed
           </label>
         </div>
-        <div class="form-check form-check-inline">
+        <div className="form-check form-check-inline">
         <input
-          class="form-check-input"
+          className="form-check-input"
           type="radio"
           name="inlineRadioOptions"
           id="all"
           onClick={this.completed}
         />
-        <label class="form-check-label" for="all">
+        <label className="form-check-label" for="all">
           All
         </label>
       </div>
-
-        <li class="nav-item nav-sort" onClick={this.props.taskId}>
+        <div className="form-inline nav-sort">Sort By : </div>
+        <li className="nav-item" onClick={this.props.taskId}>
           <div
             className={`nav-link pointer ${
               this.state.active === "taskId" ? "active" : ""
@@ -89,7 +89,7 @@ export default class Sort extends Component {
             Task ID
           </div>
         </li>
-        <li class="nav-item" onClick={this.props.taskName}>
+        <li className="nav-item" onClick={this.props.taskName}>
           <div
             className={`nav-link pointer ${
               this.state.active === "taskName" ? "active" : ""
@@ -98,7 +98,7 @@ export default class Sort extends Component {
             Task Name
           </div>
         </li>
-        <li class="nav-item" onClick={this.props.endDate}>
+        <li className="nav-item" onClick={this.props.endDate}>
           <div
             className={`nav-link pointer ${
               this.state.active === "endDate" ? "active" : ""

@@ -3,11 +3,11 @@ import axios from "axios";
 
 const setJwtToSession = token => {
   axios.defaults.headers.common['Authorization'] = token;
-  sessionStorage.setItem("Authorization", token);
+  localStorage.setItem("Authorization", token);
 };
 
 const getJwtFromSession = () => {
-  return sessionStorage.getItem("Authorization");
+  return localStorage.getItem("Authorization");
 };
 
 const getHeader = token => {

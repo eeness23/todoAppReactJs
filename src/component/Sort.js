@@ -74,6 +74,7 @@ export default class Sort extends Component {
           name="inlineRadioOptions"
           id="all"
           onClick={this.completed}
+          checked
         />
         <label className="form-check-label" for="all">
           All

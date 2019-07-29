@@ -29,10 +29,15 @@ Server Side : [Spring Boot](https://github.com/eeness23/todoAppSpring)
 ### Installing
 Firstly you have to setup "npm" to system.<br>
 Then you can run the application by typing the following codes.
-**The server side of Todo App must be run. - [Spring Boot](https://github.com/eeness23/todoAppSpring "Google's Homepage")**
+**The server side of Todo App must run. - [Spring Boot](https://github.com/eeness23/todoAppSpring)**
 ```
 npm install
 npm start
+```
+You can login test account
+```
+email : test@gmail.com
+password : test123
 ```
 
 ### A Important Note
@@ -43,12 +48,12 @@ _For Example_ <br>
 
 List of to-do items : 1,2,3,4,5,6,7,8,9 <br>
 Parent -> Childs <br>
-<img src="https://png.pngtree.com/svg/20170510/418329c59c.png" alt="drawing" width="15"/> 1 -> 2,3   <br>
-<img src="https://png.pngtree.com/svg/20170510/418329c59c.png" alt="drawing" width="15"/> 2 -> -   <br>
-<img src="https://png.pngtree.com/svg/20170510/418329c59c.png" alt="drawing" width="15"/> 3 -> 4   <br>
-<img src="https://png.pngtree.com/svg/20170510/418329c59c.png" alt="drawing" width="15"/> 6 -> 1,2 <br>
+<img src="https://cdn3.iconfinder.com/data/icons/basicolor-arrows-checks/24/149_check_ok-512.png" alt="success" width="16"/> 1 -> 2,3   <br>
+<img src="https://cdn3.iconfinder.com/data/icons/basicolor-arrows-checks/24/149_check_ok-512.png" alt="success" width="16"/> 2 -> -   <br>
+<img src="https://cdn3.iconfinder.com/data/icons/basicolor-arrows-checks/24/149_check_ok-512.png" alt="success" width="16"/> 3 -> 4   <br>
+<img src="https://cdn3.iconfinder.com/data/icons/basicolor-arrows-checks/24/149_check_ok-512.png" alt="success" width="16"/> 6 -> 1,2 <br>
 
-<img src="https://cdn1.iconfinder.com/data/icons/social-messaging-ui-color-round-1/254000/43-512.png" alt="drawing" width="15"/> 7 -> 3  You cant. Because item 3 has parent(1). 
+<img src="https://cdn1.iconfinder.com/data/icons/social-messaging-ui-color-round-1/254000/43-512.png" alt="wrong" width="15"/> 7 -> 3  You cant. Because item 3 has parent(1). 
 
 ### Pictures
 
@@ -79,7 +84,8 @@ Parent -> Childs <br>
 ## Built With
 
 * [ReactJs](https://reactjs.org/) - JS library
-* [JWT](https://jwt.io/) - Dependency Management
+* [JWT](https://jwt.io/) - Json Web Token
+* [Npm](https://www.npmjs.com/) - Dependency Management
 * [Bootstrap](https://getbootstrap.com/) - Css framework
 
 ## Authors
